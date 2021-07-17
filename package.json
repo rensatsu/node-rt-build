@@ -1,6 +1,6 @@
 {
   "name": "@rensatsu/node-rt-build",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "NodeRT modules",
   "main": "index.js",
   "scripts": {
