@@ -4,6 +4,7 @@
   "description": "NodeRT modules",
   "main": "index.js",
   "scripts": {
+    "patch": "npm version patch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
