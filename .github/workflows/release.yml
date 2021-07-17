@@ -58,8 +58,7 @@ jobs:
         with:
           allowUpdates: true
           artifactErrorsFailBuild: true
-          artifacts:
-            - ./out/${{ matrix.module }}-${{ steps.tag.outputs.tag }}.tgz
+          artifacts: ./out/${{ matrix.module }}-${{ steps.tag.outputs.tag }}.tgz
           artifactContentType: application/gzip
           omitBodyDuringUpdate: true
           omitNameDuringUpdate: true
