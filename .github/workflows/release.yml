@@ -29,8 +29,10 @@ jobs:
       - name: Set version for ${{ matrix.module }}
         env:
           REN_MODULE: ${{ matrix.module }}
+          REF: ${{ github.ref }}
         run: |
           echo "Set version for module: $Env:REN_MODULE"
+          echo "Version ref: $Env:REF"
           cd $Env:REN_MODULE
           npm version from-git
 
