@@ -27,14 +27,16 @@ jobs:
           cache: "npm"
 
       - name: Get the tag name
-        id: tag
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+        id: vars
+        run: |
+          echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+          echo ::set-output name=version::${GITHUB_REF#refs/*/v}
         shell: bash
 
       - name: Set version for ${{ matrix.module }}
         env:
           REN_MODULE: ${{ matrix.module }}
-          TAG: ${{ steps.tag.outputs.tag }}
+          TAG: ${{ steps.vars.outputs.tag }}
         run: |
           echo "Set version for module: $Env:REN_MODULE"
           echo "Version tag: $Env:TAG"
@@ -59,7 +61,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           allowUpdates: true
           artifactErrorsFailBuild: true
-          artifacts: ./out/${{ matrix.module }}-${{ steps.tag.outputs.tag }}.tgz
+          artifacts: out/${{ matrix.module }}-${{ steps.vars.outputs.version }}.tgz
           artifactContentType: application/gzip
           omitBodyDuringUpdate: true
           omitNameDuringUpdate: true
