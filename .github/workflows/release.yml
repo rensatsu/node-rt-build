@@ -27,16 +27,14 @@ jobs:
           cache: "npm"
 
       - name: Get the tag name
-        uses: actions/github-script@v4.0.2
         id: tag
-        with:
-          script: |
-            return context.payload.ref.replace(/\/?refs\/tags\//, '');
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+        shell: bash
 
       - name: Set version for ${{ matrix.module }}
         env:
           REN_MODULE: ${{ matrix.module }}
-          TAG: ${{ steps.tag.outputs.result }}
+          TAG: ${{ steps.tag.outputs.tag }}
         run: |
           echo "Set version for module: $Env:REN_MODULE"
           echo "Version tag: $Env:TAG"
@@ -72,6 +70,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./out/${{ matrix.module }}-${{ steps.tag.outputs.result }}.tgz
-          asset_name: ${{ matrix.module }}-${{ steps.tag.outputs.result }}.tgz
+          asset_path: ./out/${{ matrix.module }}-${{ steps.tag.outputs.tag }}.tgz
+          asset_name: ${{ matrix.module }}-${{ steps.tag.outputs.tag }}.tgz
           asset_content_type: application/gzip
