@@ -30,6 +30,7 @@ jobs:
         env:
           REN_MODULE: ${{ matrix.module }}
         run: |
+          echo "Set version for module: $REN_MODULE"
           cd $REN_MODULE
           npm version from-git
 
@@ -37,6 +38,7 @@ jobs:
         env:
           REN_MODULE: ${{ matrix.module }}
         run: |
+          echo "Pack module: $REN_MODULE"
           mkdir out
           cd out
           npm pack ..\$REN_MODULE
