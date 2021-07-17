@@ -1,0 +1,63 @@
+name: Build App
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    name: Build ${{ matrix.module }}
+    strategy:
+      matrix:
+        module:
+          - "windows.foundation"
+          - "windows.media"
+          - "windows.media.playback"
+          - "windows.storage.streams"
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2.3.4
+
+      - name: Prepare Node
+        uses: actions/setup-node@v2.2.0
+        with:
+          node-version: "14"
+          cache: "npm"
+
+      - name: Set version for ${{ matrix.module }}
+        env:
+          REN_MODULE: ${{ matrix.module }}
+        run: |
+          cd $REN_MODULE
+          npm version from-git
+
+      - name: Pack module ${{ matrix.module }}
+        env:
+          REN_MODULE: ${{ matrix.module }}
+        run: |
+          mkdir out
+          cd out
+          npm pack ..\$REN_MODULE
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1.1.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') }}
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/white-tea_win.zip
+          asset_name: white-tea_win_${{ steps.tag_name.outputs.SOURCE_TAG }}.zip
+          asset_content_type: application/zip
