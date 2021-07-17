@@ -26,13 +26,16 @@ jobs:
           node-version: "14"
           cache: "npm"
 
+      - name: Get the tag name
+        shell: bash
+        run: echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+
       - name: Set version for ${{ matrix.module }}
         env:
           REN_MODULE: ${{ matrix.module }}
-          TAG: ${{ github.event.release.tag_name }}
         run: |
           echo "Set version for module: $Env:REN_MODULE"
-          echo "Version ref: $Env:TAG"
+          echo "Version tag: $Env:TAG"
           cd $Env:REN_MODULE
           npm version $Env:TAG
 
@@ -41,7 +44,10 @@ jobs:
           REN_MODULE: ${{ matrix.module }}
         run: |
           echo "Pack module: $Env:REN_MODULE"
-          mkdir out
+          $outPath = "out";
+          if (!(Test-Path -path $outPath)) {
+            New-Item -ItemType directory -Path $outPath
+          }
           cd out
           npm pack ..\$Env:REN_MODULE
 
