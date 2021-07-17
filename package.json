@@ -1,0 +1,24 @@
+{
+  "name": "@rensatsu/node-rt-build",
+  "version": "1.0.0",
+  "description": "NodeRT modules",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rensatsu/node-rt-build.git"
+  },
+  "keywords": [
+    "NodeRT",
+    "Windows",
+    "Windows10"
+  ],
+  "author": "Rensatsu",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/rensatsu/node-rt-build/issues"
+  },
+  "homepage": "https://github.com/rensatsu/node-rt-build#readme"
+}
