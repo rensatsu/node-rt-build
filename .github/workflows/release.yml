@@ -30,18 +30,18 @@ jobs:
         env:
           REN_MODULE: ${{ matrix.module }}
         run: |
-          echo "Set version for module: $REN_MODULE"
-          cd $REN_MODULE
+          echo "Set version for module: $Env:REN_MODULE"
+          cd $Env:REN_MODULE
           npm version from-git
 
       - name: Pack module ${{ matrix.module }}
         env:
           REN_MODULE: ${{ matrix.module }}
         run: |
-          echo "Pack module: $REN_MODULE"
+          echo "Pack module: $Env:REN_MODULE"
           mkdir out
           cd out
-          npm pack ..\$REN_MODULE
+          npm pack ..\$Env:REN_MODULE
 
       - name: Create Release
         id: create_release
