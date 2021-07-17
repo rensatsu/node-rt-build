@@ -27,12 +27,16 @@ jobs:
           cache: "npm"
 
       - name: Get the tag name
-        shell: bash
-        run: echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+        uses: actions/github-script@v4.0.2
+        id: tag
+        with:
+          script: |
+            return context.payload.ref.replace(/\/refs\/tags\//, '');
 
       - name: Set version for ${{ matrix.module }}
         env:
           REN_MODULE: ${{ matrix.module }}
+          TAG: ${{ steps.tag.outputs.result }}
         run: |
           echo "Set version for module: $Env:REN_MODULE"
           echo "Version tag: $Env:TAG"
@@ -68,6 +72,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/white-tea_win.zip
-          asset_name: white-tea_win_${{ steps.tag_name.outputs.SOURCE_TAG }}.zip
-          asset_content_type: application/zip
+          asset_path: ./out/${{ matrix.module }}-${{ steps.tag.outputs.result }}.tgz
+          asset_name: ${{ matrix.module }}-${{ steps.tag.outputs.result }}.tgz
+          asset_content_type: application/gzip
