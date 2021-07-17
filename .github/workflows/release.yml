@@ -6,7 +6,27 @@ on:
   workflow_dispatch:
 
 jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    name: Create release draft
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2.3.4
+
+      - name: Get the tag name
+        id: vars
+        run: |
+          echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+          echo ::set-output name=version::${GITHUB_REF#refs/*/v}
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1.8.6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: true
+
   build:
+    needs: create-release
     runs-on: windows-latest
     name: Build ${{ matrix.module }}
     strategy:
@@ -66,3 +86,4 @@ jobs:
           omitBodyDuringUpdate: true
           omitNameDuringUpdate: true
           replacesArtifacts: false
+          draft: false
