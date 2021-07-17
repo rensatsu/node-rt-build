@@ -31,7 +31,7 @@ jobs:
         id: tag
         with:
           script: |
-            return context.payload.ref.replace(/\/refs\/tags\//, '');
+            return context.payload.ref.replace(/\/?refs\/tags\//, '');
 
       - name: Set version for ${{ matrix.module }}
         env:
