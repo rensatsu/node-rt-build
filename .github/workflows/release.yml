@@ -56,6 +56,7 @@ jobs:
       - name: Create Release
         uses: ncipollo/release-action@v1.8.6
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           allowUpdates: true
           artifactErrorsFailBuild: true
           artifacts: ./out/${{ matrix.module }}-${{ steps.tag.outputs.tag }}.tgz
